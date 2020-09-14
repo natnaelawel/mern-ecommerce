@@ -185,15 +185,17 @@ exports.getAllCategory = (req, res)=>{
 exports.getAllBySearch = (req, res) => {
   let order = req.body.order ? req.body.order : "desc";
   let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
-  let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+  let limit = req.body.limit ? parseInt(req.body.limit) : 6;
   let skip = parseInt(req.body.skip);
   let findArgs = {};
+  console.log('order ', order, 'sortBy', sortBy, 'limit', limit, 'skip', skip, 'filters', req.body.filters)
 
   // console.log(order, sortBy, limit, skip, req.body.filters);
   // console.log("findArgs", findArgs);
-
+  let categories = []
   for (let key in req.body.filters) {
     if (req.body.filters[key].length > 0) {
+      console.log('key is ', key)
       if (key === "price") {
         // gte -  greater than price [0-10]
         // lte - less than
@@ -202,11 +204,17 @@ exports.getAllBySearch = (req, res) => {
           $lte: req.body.filters[key][1],
         };
       } else {
-        findArgs[key] = req.body.filters[key];
+        // categories = req.body.filters[key]
+        // findArgs['category'] = {
+        //   $in: req.body.filters[key],
+        // };
+        findArgs[key] = req.body.filters[key]
+        console.log('categories are ', categories)
       }
     }
   }
 
+  console.log('find args are ', findArgs)
   Product.find(findArgs)
     .select("-photo")
     .populate("category")

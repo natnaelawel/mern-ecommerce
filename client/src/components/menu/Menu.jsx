@@ -1,8 +1,7 @@
-import './Menu.css'
+import "./Menu.css";
 import React from "react";
 import { Link, withRouter, useHistory } from "react-router-dom";
 import { signOut, isAuthenticated } from "../../API/auth";
-
 
 const isActive = (history, path) => {
   console.log(history);
@@ -40,14 +39,18 @@ function Menu() {
       </button>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav ml-auto">
+          <li className="nav-item mx-2 ">
+            <Link className="nav-link" to="/shop">
+              Shop
+            </Link>
+          </li>
           {isAuthenticated() ? (
             <>
               <li className="nav-item mx-2 ">
                 <Link
                   //   style={isActive(history, "/signin")}
                   className="nav-link"
-                  to=
-                  {
+                  to={
                     isAuthenticated().user.role == 1
                       ? "/admin/dashboard"
                       : "/user/dashboard"

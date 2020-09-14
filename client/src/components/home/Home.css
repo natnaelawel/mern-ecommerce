@@ -1,0 +1,6 @@
+.productBySell{
+    /* display: grid !important; */
+    /* grid-auto-columns: minmax(300px, 1fr); */
+    /* grid-template-columns: repeat(fillauto, minmax(300px, 1fr)); */
+    border: 1px solid red !important;
+}

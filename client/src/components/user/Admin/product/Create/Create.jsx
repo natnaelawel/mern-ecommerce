@@ -183,15 +183,19 @@ function Create() {
       </div>
 
       <div className="form-group">
-        <label htmlFor="photo" className="text-muted"></label>
-        <input
-          //   onChange={(e) => setFile(e.target.files[0])}
-          type="file"
-          name="photo"
-          accept="image/*"
-          className="form-control btn btn-secondary"
-          id="photo"
-        />
+        <div className="custom-file">
+          <label htmlFor="photo" className="custom-file-label text-muted">
+            Choose image
+          </label>
+          <input
+            //   onChange={(e) => setFile(e.target.files[0])}
+            type="file"
+            name="photo"
+            accept="image/*"
+            className="custom-file-input form-control btn btn-secondary"
+            id="photo"
+          />
+        </div>
       </div>
 
       <button

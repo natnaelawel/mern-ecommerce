@@ -9,6 +9,7 @@ import AdminDashboard from "./components/user/Admin/Dashboard/Dashboard";
 import AdminRoute from './RouteHandler/Admin';
 import createCategory from "./components/user/Admin/category/Create/Create";
 import createProduct from "./components/user/Admin/product/Create/Create";
+import Shop from './components/shop/Shop';
 
 function Router() {
     return (
@@ -17,6 +18,7 @@ function Router() {
           <Route path="/" exact component={Home} />
           <Route path="/signin" exact component={Signin} />
           <Route path="/signup" exact component={Signup} />
+          <Route path="/shop" exact component={Shop} />
           <PrivateRoute
             path="/user/dashboard"
             exact
