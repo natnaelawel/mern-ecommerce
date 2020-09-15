@@ -26,8 +26,8 @@ function Card({ product }) {
       <Link
         className="product__card card"
         to={{
-          pathname: "/product",
-          params: "something",
+          pathname: `/product/${product._id}`,
+          params: `${product._id}`,
         }}
       >
         <img

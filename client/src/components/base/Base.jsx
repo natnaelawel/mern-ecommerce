@@ -14,9 +14,8 @@ function Base({
   return (
     <div>
       <Menu />
-      <Search/>
-      <h3 className="container my-2">{title}</h3>
-      <div className={className}>{children}</div>
+      {/* <h3 className="container my-2">{title}</h3> */}
+      <div className={`my-5 ${className}`}>{children}</div>
     </div>
   );
 }

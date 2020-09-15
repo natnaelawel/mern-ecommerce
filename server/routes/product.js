@@ -15,7 +15,8 @@ const {
   getRelatedProducts,
   getAllCategory,
   getAllBySearch,
-  getPhoto
+  getPhoto,
+  getSearchResults,
 } = require("../controllers/product");
 const { requireSignIn, isAdmin, isAuth } = require("../controllers/auth");
 const { validateCreateProduct } = require("../validator");
@@ -42,6 +43,7 @@ router.delete("/:productId", requireSignIn, isAuth, isAdmin, deleteProduct);
 router.put("/:productId/:userId", requireSignIn, isAuth, isAdmin, updateProduct);
 
 router.post("/by/search", getAllBySearch);
+router.get("/search", getSearchResults);
 
 
 router.param("userId", userById);

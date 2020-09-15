@@ -4,6 +4,7 @@ const fs = require('fs')
 const formidable = require('formidable')
 const _ = require('lodash')
 const { errorHandler } = require("../helpers/dbErrorHandler");
+const { response } = require("express");
 
 
 exports.getProduct= (req, res)=>{
@@ -96,7 +97,7 @@ exports.updateProduct = (req, res)=>{
 }
 
 exports.productById = (req, res, next, id)=>{
-    Product.findById(id).exec((err, product)=>{
+    Product.findById(id).populate('category', 'name').exec((err, product)=>{
         if(err){
             return res.status(400).json({
                 message: "Product not found"
@@ -162,7 +163,7 @@ exports.getRelatedProducts = (req, res)=>{
       if(err){
         console.log(err)
         return res.status(400).json({
-          message: 'Product Nott Found'
+          message: 'Product Not Found'
         })
 
       }
@@ -182,6 +183,28 @@ exports.getAllCategory = (req, res)=>{
     res.json(categories)
   })
 }
+
+exports.getSearchResults = (req, res)=>{
+  const query = {}
+  if(req.query.search){
+    query.name = {$regex: req.query.search, $options: 'i'}
+    if(req.query.category && req.query.category !== 'all'){
+      query.category = req.query.category
+    }
+    Product.find(query, (err, products)=>{
+      if(err){
+        return res.status(400).json({
+          message: "No Result"
+        })
+      }
+      // const products = [...datas.forEach(product => product.photo = undefined)]
+      return res.json(products)
+    })
+    .select('-photo')
+  }
+
+}
+
 exports.getAllBySearch = (req, res) => {
   let order = req.body.order ? req.body.order : "desc";
   let sortBy = req.body.sortBy ? req.body.sortBy : "_id";

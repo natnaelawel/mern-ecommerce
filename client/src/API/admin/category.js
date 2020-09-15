@@ -1,5 +1,6 @@
 import axios from "../Axios";
 import { isAuthenticated } from "../auth";
+import queryString from 'query-string'
 
 const tokenConfig = () => {
   const token = isAuthenticated() ? isAuthenticated().user.token : null;
@@ -32,4 +33,44 @@ export const fetchCategories = async()=>{
     .catch((err) => {
       return err.response.data;
     });
+}
+;
+
+export const fetchSearchedCategories = async params => {
+  const query = queryString.stringify(params)
+  console.log('query is ', query)
+  return await axios
+    .get(`/product/search?${query}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err.response.data;
+    });
+};
+
+export const fetchSingleProduct = async (id, userId) =>{
+    const url = `/product/${id}/${userId}`;
+    console.log('url is ', url)
+    return await axios
+      .get(url)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        return err.response.data;
+      });
+}
+
+export const fetchRelatedProducts = async (id)=>{
+      const url = `/product/related/${id}`;
+      return await axios
+        .get(url)
+        .then((res) => {
+          console.log('data is ', res)
+          return res.data;
+        })
+        .catch((err) => {
+          return err.response.data;
+        });
 }

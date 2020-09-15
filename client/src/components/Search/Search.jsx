@@ -1,24 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  fetchCategories,
+  fetchSearchedCategories,
+} from "../../API/admin/category";
 
-function Search() {
+function Search({ handleSearchQuery }) {
+  const [categories, setCategories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState({
+    category: "all",
+    search: "",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setCategories(await fetchCategories());
+    };
+    try {
+      fetchData();
+    } catch (error) {}
+  }, []);
+
+  const handleChange = (name) => (event) => {
+    if (name === "queryText") {
+      const query = { ...searchQuery, search: event.target.value };
+      setSearchQuery(query);
+      handleSearchQuery(query);
+    } else {
+      const query = { ...searchQuery, category: event.target.value };
+      setSearchQuery(query);
+      handleSearchQuery(query);
+    }
+  };
   return (
     <div className="input-group my-3 container ">
-      <div className="row">
-        <div className="col-md-3">
-          <select className="form-control input-group-prepend ">
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          <div className="input-group-append">
-              @
-          </div>
-        </div>
-        <div className="col-md-9">
-          <input type="text" className="form-control" />
-        </div>
-
+      <div className="input-group input-group-lg">
+        <select
+          className="input-group-prepend btn mr-2  px-3 btn-outline-secondary"
+          onChange={handleChange("category")}
+        >
+          <option value="all" defaultChecked>
+            All
+          </option>
+          {categories &&
+            categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
+        </select>
+        <input
+          onChange={handleChange("queryText")}
+          type="text"
+          placeholder="Search here"
+          className="form-control px-4 py-2"
+        />
       </div>
     </div>
   );

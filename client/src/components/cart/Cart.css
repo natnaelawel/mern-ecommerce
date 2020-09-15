@@ -1,0 +1,14 @@
+.cart__image{
+    height: 200px !important;
+    width: 300px !important;
+}
+.cart__image img {
+    height: 100%;
+    width: 100%;
+}
+
+.checkout{
+    height: 150px;
+    /* display: flex !important; */
+    /* flex-direction: column !important; */
+}

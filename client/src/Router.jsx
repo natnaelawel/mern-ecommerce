@@ -10,6 +10,8 @@ import AdminRoute from './RouteHandler/Admin';
 import createCategory from "./components/user/Admin/category/Create/Create";
 import createProduct from "./components/user/Admin/product/Create/Create";
 import Shop from './components/shop/Shop';
+import ProductDetail from './components/ProductDetail/ProductDetail';
+import Cart from './components/cart/Cart';
 
 function Router() {
     return (
@@ -19,6 +21,8 @@ function Router() {
           <Route path="/signin" exact component={Signin} />
           <Route path="/signup" exact component={Signup} />
           <Route path="/shop" exact component={Shop} />
+          <Route path="/product/:productId" exact component={ProductDetail} />
+          <Route path="/cart" exact component={Cart} />
           <PrivateRoute
             path="/user/dashboard"
             exact
