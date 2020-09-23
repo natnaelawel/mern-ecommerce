@@ -3,7 +3,8 @@ import Base from "../base/Base";
 import {
   getItemTotal,
   getAllCartItems,
-  getTotalPrice, emptyCart
+  getTotalPrice,
+  emptyCart,
 } from "../../helpers/cart";
 import { API_URL } from "../../config";
 import "./Cart.css";
@@ -13,11 +14,12 @@ import { isAuthenticated } from "../../API/auth";
 import {
   getBraintreeClientToken,
   processPayment,
-} from "../../API/admin/braintree";
+} from "../../API/payment/braintree";
 
 // drop in
 
 import DropIn from "braintree-web-drop-in-react";
+import { createOrder } from "../../API/payment/order";
 
 function Cart() {
   const [cartProducts, setCartProducts] = useState([]);
@@ -58,6 +60,9 @@ function Cart() {
     setProductDataChanged((prev) => !prev);
   };
 
+  const handleAddress = (event)=>{
+    setData({...data, address: event.target.value})
+  }
   const handlePay = () => {
     // send the nonce to
     // nonce = data.instance.requestPaymentMethod()
@@ -72,14 +77,20 @@ function Cart() {
           amount: getTotalPrice(),
         };
         const result = await processPayment(userId, token, paymentData);
-
-        setData({ ...data, success: result.success });
-        emptyCart(()=>{
-          handleChangeInData()
-        })
-        // empty cart
-
+        console.log(result)
         // create order in a database
+
+        createOrder(userId, token, {
+          products: cartProducts,
+          transaction_id: result.transaction.id,
+          amount: result.transaction.amount,
+          address: data.address
+        });
+        // empty cart
+        setData({ ...data, success: result.success });
+        emptyCart(() => {
+          handleChangeInData();
+        });
 
         console.log(result);
       } catch (error) {
@@ -107,16 +118,31 @@ function Cart() {
     <div>
       {data.clientToken !== null && cartProducts.length > 0 && (
         <div>
+          <div className="form-group">
+            <label className="text-muted" htmlFor="address">
+              Delivery Address
+            </label>
+            <textarea
+              name="address"
+              id="address"
+              placeholder="Type your delivery address here..."
+              className="form-control"
+              id="address"
+              onChange={handleAddress}
+
+            ></textarea>
+          </div>
           <DropIn
             options={{
               authorization: data.clientToken,
               paypal: {
-                flow: "vault"
-              }
+                flow: "checkout",
+                currency: "USD",
+              },
             }}
             onInstance={(instance) => (data.instance = instance)}
           />
-          <button onClick={handlePay} className="btn btn-warning">
+          <button onClick={handlePay} className="btn btn-warning btn-block">
             Pay
           </button>
         </div>
@@ -128,9 +154,9 @@ function Cart() {
     <div className="alert alert-danger">{error}</div>
   );
 
-    const showSuccess = (message) => (
-      <div className="alert alert-success">Purchase successfully completed</div>
-    );
+  const showSuccess = (message) => (
+    <div className="alert alert-success">Purchase successfully completed</div>
+  );
 
   return (
     <Base title="cart" className="container">

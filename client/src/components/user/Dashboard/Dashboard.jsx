@@ -18,7 +18,7 @@ function Dashboard() {
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to="/profile/update" className="nav-link">
+            <Link to={`/user/profile/${_id}`} className="nav-link">
               Update Profile
             </Link>
           </li>

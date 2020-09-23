@@ -1,7 +1,16 @@
 .product__detail{
-    height: 80vh;
+}
+
+.product__detail img{
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 .related__products{
     /* background-color: black; */
+}
+.product__info{
+    
+    height: 80vh;
 }

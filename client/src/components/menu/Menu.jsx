@@ -49,9 +49,10 @@ function Menu() {
         <li className="nav-item">
           <Link className="navbar-brand" to="/">
             <img
-              src="http://localhost:8000/api/product/photo/5f5a76f770bde130406a2620"
+              // src="http://localhost:8000/api/product/photo/5f5a76f770bde130406a2620"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/The_Book_Depository.svg/1024px-The_Book_Depository.svg.png"
               className="mx-2"
-              width="60"
+              width="100"
               height="30"
               alt=""
               loading="lazy"

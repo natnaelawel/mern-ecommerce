@@ -5,14 +5,18 @@ import { isAuthenticated } from "../../../../../API/auth";
 import { Link } from "react-router-dom";
 import { fetchCategories } from "../../../../../API/admin/category";
 
+import ImageUploader from "react-images-upload";
+
 function Create() {
+  const [file, setFile] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     price: "",
     category: "",
-    shipping: "",
+    shipping: true,
     quantity: 0,
+    photo: "",
   });
 
   const [errors, setErrors] = useState([]);
@@ -20,7 +24,6 @@ function Create() {
   const [loading, setLoading] = useState(false);
   const [redirectToProfile, setRedirectToProfile] = useState(false);
   const [success, setSuccess] = useState();
-  const [file, setFile] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +60,14 @@ function Create() {
     </ul>
   );
 
+  const onDrop = (photo) => {
+    console.log(photo);
+    setFile(photo[0]);
+    // this.setState({
+    //     pictures: this.state.pictures.concat(picture),
+    // });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const {
@@ -90,7 +101,7 @@ function Create() {
           description: "",
           price: "",
           category: "",
-          shipping: "",
+          shipping: true,
           quantity: 0,
         });
       }
@@ -106,12 +117,12 @@ function Create() {
         </label>
         <input
           type="text"
+          value={formData.name}
           onChange={handleChange("name")}
           className="form-control"
           id="name"
         />
       </div>
-
       <div className="form-group">
         <label htmlFor="description" className="text-muted">
           Description
@@ -120,10 +131,10 @@ function Create() {
           onChange={handleChange("description")}
           className="form-control"
           name="description"
+          value={formData.description}
           id="description"
         ></textarea>
       </div>
-
       <div className="form-group">
         <label htmlFor="price" className="text-muted">
           Price
@@ -132,11 +143,11 @@ function Create() {
           type="number"
           onChange={handleChange("price")}
           className="form-control"
+          value={formData.price}
           id="price"
           name="price"
         />
       </div>
-
       <div className="form-group">
         <label htmlFor="category" className="text-muted">
           Category
@@ -145,6 +156,7 @@ function Create() {
           name="category"
           className="form-control"
           id="category"
+          value={formData.category}
           onChange={handleChange("category")}
         >
           {categories?.map(({ _id, name }) => (
@@ -154,52 +166,48 @@ function Create() {
           ))}
         </select>
       </div>
-
-      <div className="form-group">
-        <label htmlFor="quantity" className="text-muted">
-          Quantity
-        </label>
-        <input
-          type="number"
-          onChange={handleChange("quantity")}
-          className="form-control"
-          id="quantity"
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="shipping" className="text-muted">
-          Shipping
-        </label>
-        <select
-          name="shipping"
-          className="form-control"
-          id="shipping"
-          onChange={handleChange("shipping")}
-        >
-          <option value={true}>Yes</option>
-          <option value={false}>No</option>
-        </select>
-      </div>
-
-      <div className="form-group">
-        <div className="custom-file">
-          <label htmlFor="photo" className="custom-file-label text-muted">
-            Choose image
+      <div className="row">
+        <div className="form-group col-md-6">
+          <label htmlFor="quantity" className="text-muted">
+            Quantity
           </label>
           <input
-            //   onChange={(e) => setFile(e.target.files[0])}
-            type="file"
-            name="photo"
-            accept="image/*"
-            className="custom-file-input form-control btn btn-secondary"
-            id="photo"
+            type="number"
+            value={formData.quantity}
+            onChange={handleChange("quantity")}
+            className="form-control"
+            id="quantity"
           />
+        </div>
+        <div className="form-group col-md-6">
+          <label htmlFor="shipping" className="text-muted">
+            Shipping
+          </label>
+          <select
+            name="shipping"
+            className="form-control"
+            id="shipping"
+            value={formData.shipping}
+            onChange={handleChange("shipping")}
+          >
+            <option value={true}>Yes</option>
+            <option value={false}>No</option>
+          </select>
         </div>
       </div>
 
+      <ImageUploader
+        withIcon={true}
+        buttonText="Choose images"
+        onChange={onDrop}
+        singleImage={true}
+        imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+        maxFileSize={5242880}
+        withPreview={true}
+      />
+
       <button
-        className="btn btn-outline-success btn-outline my-2"
+        className="btn btn-outline-success btn-outline my-2 btn-block"
         type="submit"
         disabled={loading}
       >

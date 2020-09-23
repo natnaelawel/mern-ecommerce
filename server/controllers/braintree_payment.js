@@ -34,7 +34,7 @@ exports.generateToken = (req, res) => {
     },
     function (err, response) {
       if (err) {
-        response.status(500).send(err);
+        res.status(500).send(err);
       } else {
         const clientToken = response.clientToken;
         res.send(clientToken);

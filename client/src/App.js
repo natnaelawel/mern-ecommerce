@@ -4,7 +4,9 @@ import Router from './Router';
 
 import 'jquery'
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.min";
+// import "bootstrap/dist/js/bootstrap.min";
+
+
 
 function App() {
   return (

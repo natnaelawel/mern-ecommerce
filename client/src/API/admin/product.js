@@ -1,6 +1,7 @@
 import axios from "../Axios";
 
 export const createProduct = async (userId, token, product) => {
+  console.log('user id ', userId, token)
   return await axios
     .post(`/product/${userId}`, product, {
       headers: {

@@ -70,7 +70,7 @@ function ProductDetail() {
     >
         {shouldRedirect()}
       <div className="row product__detail">
-        <div className="col-md-6">
+        <div className="col-md-6 product__info">
           <img
             onError={(e) =>
               (e.target.src =
