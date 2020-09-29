@@ -4,7 +4,6 @@ const fs = require('fs')
 const formidable = require('formidable')
 const _ = require('lodash')
 const { errorHandler } = require("../helpers/dbErrorHandler");
-const { response } = require("express");
 
 
 exports.getProduct= (req, res)=>{
@@ -34,17 +33,17 @@ exports.getAllProduct = (req, res)=>{
 }
 
 exports.deleteProduct = (req, res)=>{
-    let Product = req.Product
-    deletedProduct.remove((err, deletedProduct)=>{
+    let Product = req.product
+    console.log('product is ', Product)
+    Product.remove((err, deletedProduct)=>{
         if(err){
             return res.status(400).json({
                 message: errorHandler(err)
             })
         }
         res.json({
-            Product,
+            deletedProduct,
             message: 'product deleted successfully'
-
         })
     })
 
@@ -82,11 +81,11 @@ exports.updateProduct = (req, res)=>{
         product.photo.data = fs.readFileSync(files.photo.path);
         product.photo.contentType = files.photo.type;
       }
-
+      
       product.save((err, product) => {
         if (err) {
           return res.status(400).json({
-            message: errorHandler(err),
+            message: err,
           });
         }
         return res.json({

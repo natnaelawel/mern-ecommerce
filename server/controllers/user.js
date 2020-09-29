@@ -1,5 +1,7 @@
 const { trim } = require("lodash");
 const User = require("../models/user");
+const {Order} = require("../models/order");
+const { errorHandler } = require("../helpers/dbErrorHandler");
 exports.userById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
     if (err || !user) {
@@ -17,10 +19,30 @@ exports.getUser = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
+  const {name, email, password, confirm} = req.body
+  if(password !== confirm){
+   return res.status(400).json({message: 'password don\'t match'})
+  }
+
+
+  let updatedData = {
+    name,
+    email
+  }
+  if(password!== ""){
+    updatedData = {
+      name,
+      email,
+      password,
+    };
+  }
+
+
+  console.log('updated data is ', updatedData)
   User.findOneAndUpdate(
     { _id: req.profile._id },
-    { $set: req.body },
-    { new: true },
+    { $set:updatedData },
+      { new: true },
     (err, user) => {
       if (err) {
         return res
@@ -63,3 +85,17 @@ exports.addOrderHistoryToUser = (req, res, next) => {
     }
   );
 };
+
+
+exports.purchaseHistory = (req, res)=>{
+  Order.find({user: req.profile._id})
+    .populate('user', '_id, name')
+    .sort('-createdAt')
+    .exec((err, orders)=>{
+      if(err){
+        return res.status(400).json({errors: errorHandler(err)})
+      }
+
+      res.json(orders)
+    })
+}

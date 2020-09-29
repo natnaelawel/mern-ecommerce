@@ -92,7 +92,7 @@ function Menu() {
                   //   style={isActive(history, "/signin")}
                   className="nav-link"
                   to={
-                    isAuthenticated().user.role == 1
+                    isAuthenticated() && isAuthenticated()?.user.role == 1
                       ? "/admin/dashboard"
                       : "/user/dashboard"
                   }

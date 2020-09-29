@@ -13,10 +13,23 @@ export const readProfile = async (userId, token)=>{
      }
 }
 
-export const updateProfile = async (userId, token, profile) => {
+export const update = (user, next)=>{
+  console.log('user is ', user)
+  if(typeof window !== 'undefined'){
+    if(localStorage.getItem("jwt")){
+      let auth = JSON.parse(localStorage.getItem('jwt'))
+      auth.user = user
+      localStorage.setItem('jwt', JSON.stringify(auth))
+      next()
+      return
+    }
+  }
+}
+
+export const updateUserProfile = async (userId, token, profile) => {
   console.log("user id ", userId, token);
   return await axios
-    .put(`/profile/${userId}`, profile, {
+    .put(`/user/${userId}`, profile, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

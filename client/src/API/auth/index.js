@@ -51,6 +51,7 @@ export const signIn = (email, password) => {
     .then(res =>res.data)
     .catch((err) => {
       console.log(err);
+      return err.response.data
     });
 };
 

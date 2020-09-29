@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Col, Form, Row } from "react-bootstrap";
 import { isAuthenticated } from "../../../API/auth";
-import { readProfile } from "../../../API/profile/user-profile";
+import {
+  readProfile,
+  update,
+  updateUserProfile,
+} from "../../../API/profile/user-profile";
 import Base from "../../base/Base";
 
 function Profile() {
-    const [profile, setProfile] = useState("");
-    const [error, setError] = useState("")
-    const userId = isAuthenticated().user._id;
-    const token = isAuthenticated().token;
-    const [validated, setValidated] = useState(false);
-    const [formData, setFormData] = useState({
+  const [profile, setProfile] = useState("");
+  const [error, setError] = useState("");
+  const userId = isAuthenticated().user._id;
+  const token = isAuthenticated().token;
+  const [validated, setValidated] = useState(false);
+  const [success, setSuccess] = useState(false)
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
@@ -31,24 +36,42 @@ function Profile() {
       <p>{error}</p>
     </Alert>
   );
-  
-  const handleSubmit = (event) => {
-      event.preventDefault()
-      console.log('submitting')
-      const form = document.querySelector('form');
-    // const form = event.currentTarget;
 
-      if (formData.password !== formData.confirm) {
-        //   event.preventDefault();
-        //   event.stopPropagation();
-          setError('Password don\'t match')
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("submitting");
+    const form = document.querySelector("form");
+
+    if (formData.password !== formData.confirm) {
+      //   event.preventDefault();
+      //   event.stopPropagation();
+      setError("Password don't match");
+      return;
+    }
+    let result;
+    const updateProfile = async () => {
+      try {
+        result = await updateUserProfile(userId, token, formData);
+      } catch (error) {
+        if(error){
+          setError(error)
+          return
         }
-        
-      setValidated(true);
+      }
+      update(result, ()=>{
+        setSuccess(true)
+      })
+      console.log(result.data);
     };
+    updateProfile();
+  };
 
   const showProfileForm = () => (
-    <form noValidate validated={validated} as={Row} onSubmit={()=>handleSubmit()}>
+    <form
+      // validated={value && setValidated(value)}
+      as={Row}
+      onSubmit={handleSubmit}
+    >
       <Col md={{ span: 6, offset: 3 }}>
         <Form.Group as={Row} controlId="username">
           <Form.Label>Username</Form.Label>
@@ -56,6 +79,7 @@ function Profile() {
             type="text"
             defaultValue={formData.name}
             placeholder="Enter your username"
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </Form.Group>
         <Form.Group as={Row} controlId="email">
@@ -64,6 +88,7 @@ function Profile() {
             type="email"
             defaultValue={formData.email}
             placeholder="Enter email"
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
@@ -92,16 +117,28 @@ function Profile() {
           />
         </Form.Group>
 
-        <Button as={Row}  type="submit" variant="primary">
+        <button type="submit" className="btn btn-primary">
           Save Changes
-        </Button>
+        </button>
       </Col>
     </form>
   );
+
+  const showSuccess = () => (
+    <Alert
+      variant="success"
+      dismissible
+      onClose={() => setSuccess(false)}
+      dismissible
+    >
+      <Alert.Heading>Profile updated successfully</Alert.Heading>
+    </Alert>
+  );
   return (
     <Base title="profile" className="container">
-      {JSON.stringify(formData)}
+      {/* {JSON.stringify(formData)} */}
       {/* {JSON.stringify(profile)} */}
+      {success && showSuccess()}
       {error && showError()}
       {showProfileForm()}
     </Base>

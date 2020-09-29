@@ -23,6 +23,7 @@ function Signin() {
     setFormData({ ...formData, errors: [], error: "", loading: true });
     const { email, password } = formData;
     const data = await signIn(email, password);
+    console.log('data is ', data)
     if (data.errors?.length > 0) {
       console.log(data.errors);
       setFormData({

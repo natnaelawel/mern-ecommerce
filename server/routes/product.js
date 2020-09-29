@@ -34,12 +34,13 @@ router.post(
   create
 );
 
-router.get('/', getAllProduct)
+router.get("/", getAllProduct);
+router.get("/:productId", getProduct);
 router.get("/categories", getAllCategory)
 router.get("/photo/:productId", getPhoto)
 router.get('/related/:productId', getRelatedProducts)
 router.get("/:productId/:userId", getProduct);
-router.delete("/:productId", requireSignIn, isAuth, isAdmin, deleteProduct);
+router.delete("/:productId/:userId", requireSignIn, isAuth, isAdmin, deleteProduct);
 router.put("/:productId/:userId", requireSignIn, isAuth, isAdmin, updateProduct);
 
 router.post("/by/search", getAllBySearch);

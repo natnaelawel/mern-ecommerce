@@ -3,6 +3,7 @@ import "./Dashboard.css";
 import Base from "../../base/Base";
 import { isAuthenticated } from "../../../API/auth";
 import { Link } from "react-router-dom";
+import PurchaseHistory from "../PurchaseHistory/PurchaseHistory";
 function Dashboard() {
   const {
     user: { _id, name, email, role },
@@ -22,6 +23,7 @@ function Dashboard() {
               Update Profile
             </Link>
           </li>
+         
         </ul>
       </div>
     );
@@ -48,6 +50,7 @@ function Dashboard() {
           </div>
           <div className="card mb-2">
             <h3 className="card-header">Purchase history</h3>
+            {PurchaseHistory()}
           </div>
         </div>
       </div>
